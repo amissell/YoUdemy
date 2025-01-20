@@ -1,9 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../../../vendor/autoload.php';
-// require_once __DIR__ . '/../../../classes/User.php'
-
-use app\classes\User;
+use app\public\classes\User;
 
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,10 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmPassword = $_POST['confirm_password'];
     $firstName = $_POST['first_name'];
     $lastName = $_POST['last_name'];
-    $role = 'student'; // Default role
+    $role = $_POST['role']; // Capture the selected role
 
     // Validate inputs
-    if (empty($email) || empty($password) || empty($confirmPassword) || empty($firstName) || empty($lastName)) {
+    if (empty($email) || empty($password) || empty($confirmPassword) || empty($firstName) || empty($lastName) || empty($role)) {
         $error = "All fields are required.";
     } elseif ($password !== $confirmPassword) {
         $error = "Passwords do not match.";
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create account - Windmill Dashboard</title>
+    <title>Create account - YoUdemy Dashboard</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
@@ -135,6 +133,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     placeholder="***************"
                     required
                   />
+                </label>
+                <label class="block mt-4 text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">Role</span>
+                  <select
+                    name="role"
+                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
+                    required
+                  >
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                  </select>
                 </label>
 
                 <div class="flex mt-6 text-sm">

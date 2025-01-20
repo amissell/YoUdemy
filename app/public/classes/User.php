@@ -1,9 +1,11 @@
 <?php
-namespace app\classes;
-require_once __DIR__ . '/../../vendor/autoload.php';
+
+namespace app\public\classes;
+
+require_once __DIR__ . '/../../../vendor/autoload.php';
 
 
-use app\batabases\DBConnection; 
+use app\batabases\DBConnection;
 use PDO;
 use PDOException;
 
@@ -31,7 +33,7 @@ class User
     {
         try {
             // Validate inputs
-            if (empty($email) || empty($password) || empty($firstName) || empty($lastName)) {
+            if (empty($email) || empty($password) || empty($firstName) || empty($lastName) || empty($role)) {
                 throw new \Exception("All fields are required.");
             }
 
@@ -64,7 +66,6 @@ class User
         }
     }
 
-    // Public method to log in a user
     public function login($email, $password)
     {
         try {
@@ -76,14 +77,14 @@ class User
 
             // Verify the password
             if ($user && password_verify($password, $user['password'])) {
-                // Set private properties with user data
-                $this->id = $user['id'];
-                $this->email = $user['email'];
-                $this->firstName = $user['first_name'];
-                $this->lastName = $user['last_name'];
-                $this->role = $user['role'];
-
-                return $this->getUserData(); // Return user data
+                // Return user data including role
+                return [
+                    'id' => $user['id'],
+                    'email' => $user['email'],
+                    'first_name' => $user['first_name'],
+                    'last_name' => $user['last_name'],
+                    'role' => $user['role'], // Ensure this field exists in your database
+                ];
             } else {
                 throw new \Exception("Invalid email or password.");
             }
@@ -131,4 +132,3 @@ class User
         }
     }
 }
-?>
